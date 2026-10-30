@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="قائمة طعام وقهوة رسن الرقمية على ضفاف نهر الفرات. استعرض الأصناف وجهّز طلبك بسهولة." />
+  <title>رسن | كافيه ومطعم — على ضفاف الفرات</title>
+  <link rel="icon" type="image/png" href="/assets/brand/rasan-horse-original.png" />
+  <link rel="stylesheet" href="/src/css/menu.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "/assets/vendor/@supabase_supabase-js.js",
+      "qrcode": "/assets/vendor/qrcode.js"
+    }
+  }
+  </script>
+</head>
+<body class="menu-page">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-menu-content" class="sr-only">تخطي إلى قائمة الأصناف</a>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: ISOLATED WELCOME / COVER SCREEN (تبقى معزولة حتى يضغط تصفح المنيو) -->
+  <!-- ===================================================================== -->
+  <div id="welcome-view" class="welcome-view no-print">
+    <!-- Quiet Announcement Banner -->
+    <div id="announcement-bar" class="announcement-banner">
+      <div class="announcement-inner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span class="announcement-text">أهلاً بكم في رسن. جلسات هادئة مطلة على الفرات، وقهوة مختصة محضرة بعناية.</span>
+      </div>
+    </div>
+
+    <!-- Hero Section (Isolated Fullscreen Cover) -->
+    <section class="hero-section" id="hero-section" aria-label="معلومات المطعم">
+      <div class="hero-bg-overlay"></div>
+
+      <!-- Floating Language Button on Cover Screen -->
+      <div class="welcome-top-bar">
+        <button id="welcome-lang-btn" class="lang-btn" aria-label="Switch Language / تغيير اللغة">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20"></path>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-text">English</span>
+        </button>
+      </div>
+
+      <div class="hero-container">
+        <div class="hero-identity">
+          <!-- Original Horse Mark -->
+          <img
+            src="/assets/brand/rasan-horse-original.png"
+            alt="شعار حصان رسن الأصيل"
+            class="hero-horse-mark"
+            loading="eager"
+          />
+          <!-- Original Wordmark -->
+          <img
+            src="/assets/brand/rasan-wordmark-original.png"
+            alt="رسن"
+            class="hero-wordmark"
+            loading="eager"
+          />
+          <div id="hero-descriptor-text" class="hero-descriptor" data-i18n="brandDescriptor">كافيه ومطعم</div>
+          <div id="hero-tagline-text" class="hero-tagline" data-i18n="riverTagline">على ضفاف الفرات</div>
+        </div>
+
+        <div class="hero-status">
+          <span id="hero-status-badge" class="badge badge-available">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+            <span id="hero-status-text" data-i18n="statusOpen">مفتوح حالياً</span>
+          </span>
+        </div>
+
+        <!-- Contact Row: Call, Location, Instagram, Facebook -->
+        <div class="hero-contact-row">
+          <a id="hero-call-link" href="tel:+9647701234567" class="contact-pill" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span id="hero-call-text" data-i18n="call">اتصال</span>
+          </a>
+
+          <a id="hero-map-link" href="https://maps.google.com/?q=Euphrates+River+View" class="contact-pill" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span id="hero-map-text" data-i18n="location">شارع الكورنيش، ضفاف نهر الفرات</span>
+          </a>
+
+          <a id="hero-instagram-link" href="https://instagram.com/rasan.cafe" class="contact-pill" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span id="hero-instagram-text">@rasan.cafe</span>
+          </a>
+
+          <a id="hero-facebook-link" href="https://facebook.com/rasan.cafe" class="contact-pill" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+            <span id="hero-facebook-text">فيسبوك</span>
+          </a>
+        </div>
+
+        <!-- Main Browse Menu CTA Button (Opens the Isolated Menu View) -->
+        <div class="hero-cta-wrapper">
+          <button type="button" id="btn-browse-menu" class="btn-browse-menu" aria-label="تصفح قائمة الطعام">
+            <span data-i18n="browseMenu">تصفح المنيو</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M4 6h16M4 12h16M4 18h10"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: ISOLATED MENU VIEW (الشعار فقط بالنص + البحث وبصفه زر الطوابق + جوه الأقسام) -->
+  <!-- ===================================================================== -->
+  <div id="menu-view" class="menu-view">
+    <!-- Menu Top Header: Right (Cart + Search + Floor Switcher) | Center (Horse Emblem Only) | Left (Home Button Only) -->
+    <header class="site-header no-print">
+      <div class="header-container">
+        <!-- RIGHT SIDE: السلة + شريط البحث + زر تحويل الطوابق (ثلاثة خطوط مع علامة الطابق) -->
+        <div class="header-right-tools">
+          <!-- Cart Icon Button -->
+          <button id="header-cart-btn" class="header-cart-btn" aria-label="عرض السلة">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span id="header-cart-badge" class="cart-badge" style="display:none">0</span>
+          </button>
+
+          <!-- Search Row + Floor Switcher Button right next to Search -->
+          <div class="search-and-floor-group">
+            <div class="search-bar-wrapper header-search-box">
+              <svg class="search-icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="search"
+                id="menu-search-input"
+                class="search-input"
+                placeholder="ابحث في المنيو..."
+                autocomplete="off"
+                aria-label="البحث في القائمة"
+              />
+              <button id="search-clear-btn" class="search-clear-btn" style="display:none" aria-label="مسح البحث">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Floor Switcher Trigger (ثلاثة خطوط + مؤشر الطابق الحالي) -->
+            <div class="floor-dropdown-wrapper" id="floor-dropdown-wrapper">
+              <button
+                type="button"
+                id="floor-dropdown-btn"
+                class="floor-trigger-btn"
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="تحديد الطابق"
+                title="تحديد الطابق"
+              >
+                <!-- 3 Lines / Floor Icon -->
+                <span class="floor-lines-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                  </svg>
+                </span>
+                <span class="floor-trigger-badge" id="current-floor-label">كافة الطوابق</span>
+                <svg class="floor-trigger-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <!-- Popover Floor Menu (تظهر الأزرار عند الضغط لتحديد الطابق) -->
+              <div class="floor-popover-menu" id="floor-switcher-nav" role="menu" aria-label="اختيار الطابق">
+                <div class="floor-popover-header" id="floor-popover-title">اختر الطابق</div>
+                <button type="button" class="floor-chip is-active" data-floor="all" data-label-ar="كافة الطوابق" data-label-en="All Floors">
+                  <span class="floor-chip-dot"></span>
+                  <div class="floor-chip-info">
+                    <span class="floor-chip-name" data-floor-title="all">كافة الطوابق</span>
+                    <span class="floor-chip-sub" data-floor-sub="all">عرض المنيو بالكامل</span>
+                  </div>
+                </button>
+                <button type="button" class="floor-chip" data-floor="floor_1" data-label-ar="الطابق الأرضي" data-label-en="Ground Floor">
+                  <span class="floor-chip-dot"></span>
+                  <div class="floor-chip-info">
+                    <span class="floor-chip-name" data-floor-title="floor_1">الطابق الأرضي</span>
+                    <span class="floor-chip-sub" data-floor-sub="floor_1">الكافيه والحلويات</span>
+                  </div>
+                </button>
+                <button type="button" class="floor-chip" data-floor="floor_2" data-label-ar="الطابق الثاني" data-label-en="Second Floor">
+                  <span class="floor-chip-dot"></span>
+                  <div class="floor-chip-info">
+                    <span class="floor-chip-name" data-floor-title="floor_2">الطابق الثاني</span>
+                    <span class="floor-chip-sub" data-floor-sub="floor_2">المطعم والأركيلة</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER (بالنص): فقط شعار حصان رسن بدون الكلمة -->
+        <button type="button" id="btn-logo-home" class="header-brand-center" aria-label="العودة للواجهة الرئيسية" title="العودة للواجهة الترحيبية">
+          <img
+            src="/assets/brand/rasan-horse-original.png"
+            alt="شعار رسن"
+            class="header-horse"
+            loading="eager"
+          />
+        </button>
+
+        <!-- LEFT SIDE (على يسار الشعار): فقط زر الهوم للرجوع (بدون زر اللغة) -->
+        <div class="header-left-actions">
+          <button type="button" id="btn-back-welcome" class="btn-back-cover" aria-label="العودة للرئيسية" title="الواجهة الرئيسية">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sticky Controls: Directly Under Header -> Categories Only (جوه اللي هو الأقسام) -->
+    <section id="menu-section" class="sticky-controls no-print" aria-label="أقسام القائمة">
+      <div class="controls-container">
+        <!-- Category Tabs (Horizontal Touch Scroll) -->
+        <nav class="category-nav" id="category-chips-nav" aria-label="أقسام القائمة">
+          <!-- Rendered dynamically -->
+        </nav>
+      </div>
+    </section>
+
+    <!-- Main Menu Grid -->
+    <main id="main-menu-content" class="menu-content" role="main">
+      <div id="search-count-label" class="search-count-label" style="display:none"></div>
+      <div id="products-grid" class="products-grid" aria-live="polite">
+        <!-- Product cards rendered dynamically -->
+      </div>
+      <div id="empty-search-state" class="empty-results" style="display:none">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <p data-i18n="noResults">لم يتم العثور على أصناف تطابق بحثك</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Sticky Bottom Cart Bar -->
+  <aside id="sticky-cart-bar" class="sticky-cart-bar no-print" aria-label="شريط السلة السريع">
+    <div class="sticky-cart-info">
+      <span id="sticky-cart-count" class="sticky-cart-count-badge">0 أصناف</span>
+      <span id="sticky-cart-total" class="sticky-cart-total tabular-nums">0 د.ع</span>
+    </div>
+    <button id="sticky-cart-open-btn" class="sticky-cart-btn">
+      <span data-i18n="cart">السلة</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14"></path>
+        <path d="M12 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </aside>
+
+  <!-- Product Detail Modal (Bottom sheet / centered dialog) -->
+  <div id="product-dialog" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-prod-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <button class="modal-back-btn" data-action="close" aria-label="رجوع">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span style="font-size:0.875rem; font-weight:600;">رجوع</span>
+        </button>
+        <div class="modal-product-badge badge"></div>
+        <button class="modal-close-btn" data-action="close" aria-label="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="aspect-ratio: 16/9; overflow:hidden; border-radius:var(--radius-field); margin-bottom:var(--space-3); background:var(--stone)">
+          <img class="modal-product-img" src="" alt="" style="width:100%; height:100%; object-fit:cover" />
+        </div>
+        <h2 id="modal-prod-title" class="modal-product-title" style="margin-bottom:var(--space-2)"></h2>
+        <p class="modal-product-desc" style="color:var(--muted); line-height:1.5; margin-bottom:var(--space-3)"></p>
+        <div class="modal-product-price tabular-nums" style="font-size:1.35rem; font-weight:800; color:var(--walnut); margin-bottom:var(--space-4)"></div>
+
+        <!-- Dish Options & Modifiers (سبايسي، عادي، تفاصيل الطلب) -->
+        <div class="product-options-wrapper" style="border-top:1px solid var(--line); padding-top:var(--space-3); margin-bottom:var(--space-3);">
+          <label class="form-label" style="font-size:0.875rem; font-weight:700; color:var(--walnut); margin-bottom:8px; display:block;">
+            الخيارات والتفضيلات:
+          </label>
+          <div id="product-option-pills" class="option-pills-list" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:var(--space-3);">
+            <button type="button" class="option-pill is-active" data-option="عادي / Regular">عادي</button>
+            <button type="button" class="option-pill" data-option="حار / سبايسي 🌶️">حار / سبايسي 🌶️</button>
+            <button type="button" class="option-pill" data-option="بدون سكر">بدون سكر</button>
+            <button type="button" class="option-pill" data-option="إكسترا شوت">إكسترا شوت</button>
+          </div>
+
+          <label for="product-note-input" class="form-label" style="font-size:0.8125rem; font-weight:600; color:var(--muted); margin-bottom:4px; display:block;">
+            ملاحظة إضافية للطلب (اختياري):
+          </label>
+          <input
+            type="text"
+            id="product-note-input"
+            class="form-input"
+            placeholder="مثال: قليل الملح، حليب شوفان، إلخ..."
+            maxlength="100"
+            style="font-size:0.875rem; padding:8px 12px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-field);"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div style="display:flex; align-items:center; justify-content:space-between">
+          <span style="font-weight:600; color:var(--walnut)" data-i18n="billQtyHeader">العدد</span>
+          <div class="qty-stepper">
+            <button class="qty-btn" data-action="minus" aria-label="Decrease quantity">-</button>
+            <span class="qty-display modal-qty-display">1</span>
+            <button class="qty-btn" data-action="plus" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+        <button class="btn-primary-action" data-action="add-to-cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span data-i18n="addToCart">أضف للسلة</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promotional / Featured Dish Pop-up Dialog (نافذة الطبق المميز المنبثقة) -->
+  <div id="promo-dialog" class="modal-overlay" role="dialog" aria-modal="true" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 2500;">
+    <div class="modal-dialog promo-dialog-card" style="max-width:440px; text-align:center; padding:0; overflow:hidden; border:2px solid var(--copper); box-shadow:0 20px 45px rgba(30,26,22,0.35);">
+      <button class="modal-close-btn" data-action="close" aria-label="إغلاق" style="position:absolute; top:12px; inset-inline-end:12px; z-index:10; background:rgba(30,26,22,0.65); color:#fff; border-radius:50%; width:34px; height:34px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <div style="background:var(--copper); color:#fff; font-size:0.875rem; font-weight:700; padding:8px var(--space-4); display:flex; align-items:center; justify-content:center; gap:6px;">
+        <span>⭐</span>
+        <span id="promo-badge-text">طبق اليوم المميز من شيف رسن</span>
+      </div>
+
+      <div style="aspect-ratio:16/10; width:100%; overflow:hidden; background:var(--stone);">
+        <img id="promo-dish-img" src="/assets/brand/rasan-exterior-reference.jpg" alt="" style="width:100%; height:100%; object-fit:cover;" />
+      </div>
+
+      <div style="padding:var(--space-5);">
+        <h3 id="promo-dish-title" style="font-size:1.35rem; color:var(--walnut); margin-bottom:6px; font-weight:800;">طبق اليوم الخاص</h3>
+        <p id="promo-dish-desc" style="font-size:0.875rem; color:var(--muted); line-height:1.5; margin-bottom:var(--space-3);">تجربة فريدة ونكهة غنية أُعدت بعناية على ضفاف الفرات.</p>
+        <div id="promo-dish-price" style="font-size:1.35rem; font-weight:800; color:var(--copper-dark); margin-bottom:var(--space-4);" class="tabular-nums">0 د.ع</div>
+
+        <div style="display:flex; flex-direction:column; gap:var(--space-2);">
+          <button type="button" id="promo-add-cart-btn" class="btn-primary-action" style="padding:12px; font-size:1rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>إضافة إلى السلة فوراً</span>
+          </button>
+          
+          <button type="button" data-action="close" class="btn-secondary-action" style="padding:10px; font-size:0.875rem;">
+            <span>متابعة تصفح المنيو</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Sheet / Modal (Local storage only, Dine-in vs Delivery) -->
+  <div id="cart-dialog" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cart-dialog-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 id="cart-dialog-title" class="modal-title" data-i18n="cart">السلة</h2>
+        <button class="modal-close-btn" data-action="close" aria-label="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Mode Switcher -->
+        <div class="segmented-control">
+          <button class="segmented-option is-active" data-mode="dine-in" data-i18n="dineIn">داخل الصالة</button>
+          <button class="segmented-option" data-mode="delivery" data-i18n="delivery">دليفري</button>
+        </div>
+
+        <!-- Empty Cart Notice -->
+        <div class="cart-empty-state empty-results" style="display:none; padding:var(--space-6)">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--sand)" stroke-width="1.5">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <h3 style="margin-top:var(--space-2); color:var(--walnut)" data-i18n="emptyCart">سلتك فارغة</h3>
+          <p data-i18n="emptyCartPrompt">اختر من قائمتنا المميزة وأضف الأصناف لتجهيز كشف الطلب.</p>
+        </div>
+
+        <!-- Populated Cart Content -->
+        <div class="cart-has-items-wrapper">
+          <!-- Items List -->
+          <div class="cart-items-list">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Section: Dine-in -->
+          <div id="cart-dinein-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-3); padding-top:var(--space-2); border-top:1px solid var(--line)">
+              <span style="font-weight:700; color:var(--walnut)" data-i18n="estimatedTotal">الإجمالي التقديري:</span>
+              <span class="cart-subtotal-amount tabular-nums" style="font-weight:800; font-size:1.125rem; color:var(--walnut-dark)">0 د.ع</span>
+            </div>
+            <button class="btn-primary-action" data-action="show-bill">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span data-i18n="showWaiterBill">عرض الفاتورة للكابتن</span>
+            </button>
+          </div>
+
+          <!-- Section: Delivery Form Mock -->
+          <div id="cart-delivery-section" style="display:none">
+            <div class="delivery-form">
+              <div class="form-group">
+                <label for="delivery-name-input" class="form-label" data-i18n="deliveryName">الاسم الكريم *</label>
+                <input type="text" id="delivery-name-input" class="form-input" placeholder="الاسم الكامل" required />
+              </div>
+              <div class="form-group">
+                <label for="delivery-phone-input" class="form-label" data-i18n="deliveryPhone">رقم الهاتف *</label>
+                <input type="tel" id="delivery-phone-input" class="form-input" placeholder="07XXXXXXXXX" required />
+              </div>
+              <div class="form-group">
+                <label for="delivery-address-input" class="form-label" data-i18n="deliveryAddress">عنوان التوصيل بالتفصيل *</label>
+                <textarea id="delivery-address-input" class="form-textarea" placeholder="المدينة، الحي، الشارع، أقرب نقطة دالة..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="delivery-maps-input" class="form-label" data-i18n="deliveryLocation">رابط موقع الخريطة (اختياري)</label>
+                <input type="url" id="delivery-maps-input" class="form-input" placeholder="https://maps.google.com/?q=..." />
+                <button type="button" class="location-btn" data-action="use-location">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span data-i18n="useMyLocation">استخدم موقعي الحالي</span>
+                </button>
+                <div class="location-success-msg" style="display:none"></div>
+              </div>
+              <div class="form-group">
+                <label for="delivery-notes-input" class="form-label" data-i18n="deliveryNotes">ملاحظات إضافية</label>
+                <input type="text" id="delivery-notes-input" class="form-input" placeholder="طابق، جرس، تفاصيل أخرى..." />
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:var(--space-2); padding-top:var(--space-2); border-top:1px solid var(--line)">
+                <span style="font-weight:700; color:var(--walnut)" data-i18n="subtotal">المجموع:</span>
+                <span class="cart-subtotal-amount tabular-nums" style="font-weight:800; font-size:1.125rem; color:var(--walnut-dark)">0 د.ع</span>
+              </div>
+              <p class="disclaimer-text" data-i18n="deliveryFeeNotice">أجور التوصيل والسعر النهائي يؤكدهما المطعم.</p>
+
+              <button class="btn-primary-action" data-action="open-whatsapp" style="background:#25D366; color:#fff">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.18 8.18 0 0 1-5.82 2.41c-1.5 0-2.97-.41-4.25-1.18l-.3-.18-3.15.83.84-3.07-.2-.31a8.19 8.19 0 0 1-1.26-4.32c0-4.54 3.7-8.24 8.26-8.24z"></path>
+                </svg>
+                <span data-i18n="openWhatsapp">فتح واتساب لإرسال الطلب</span>
+              </button>
+
+              <button type="button" class="btn-secondary-action" data-action="copy-message">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span data-i18n="copyMessage">نسخ نص الرسالة</span>
+              </button>
+
+              <p class="disclaimer-text" data-i18n="whatsappWarning" style="margin-top:var(--space-2)">
+                سيفتح واتساب برسالة جاهزة؛ يرجى الضغط على إرسال لإرسال طلبك. السعر النهائي ورسوم التوصيل يؤكدها المطعم.
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top:var(--space-4); text-align:center">
+            <button type="button" data-action="clear-cart" style="color:var(--danger); font-size:0.8125rem; font-weight:600; text-decoration:underline" data-i18n="clearCart">
+              إفراغ السلة
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waiter Bill Modal (Read-only, printable) -->
+  <div id="bill-dialog" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="bill-title">
+    <div class="modal-dialog" style="max-width:480px">
+      <div class="modal-header no-print">
+        <h2 id="bill-title" class="modal-title" data-i18n="billTitle">كشف طلب للعرض على الكابتن</h2>
+        <button class="modal-close-btn" data-action="close" aria-label="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="bill-container">
+          <div class="bill-brand-header">
+            <img src="/assets/brand/rasan-wordmark-original.png" alt="رسن" class="bill-logo-img" />
+            <div style="font-weight:700; font-size:1.0625rem" data-i18n="billSubtitle">رسن | كافيه ومطعم — على ضفاف الفرات</div>
+            <div style="font-size:0.875rem; color:var(--muted)" data-i18n="billTitle">كشف طلب للعرض على الكابتن</div>
+            <div class="bill-table-number-text bill-table-badge" style="display:none">طاولة: --</div>
+          </div>
+
+          <table class="bill-items-table">
+            <thead>
+              <tr>
+                <th data-i18n="billItemHeader">الصنف</th>
+                <th class="col-num" data-i18n="billQtyHeader">العدد</th>
+                <th class="col-num" data-i18n="billPriceHeader">المبلغ</th>
+              </tr>
+            </thead>
+            <tbody class="bill-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+
+          <div class="bill-total-row">
+            <span data-i18n="estimatedTotal">الإجمالي التقديري:</span>
+            <span class="bill-total-amount tabular-nums">0 د.ع</span>
+          </div>
+
+          <div class="bill-disclaimer-box" data-i18n="billWarning">
+            هذه قائمة اختيارات للعرض على الكابتن وليست فاتورة دفع أو طلباً تم إرساله.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer no-print">
+        <button class="btn-primary-action" data-action="print">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span data-i18n="printBill">طباعة الكشف</span>
+        </button>
+        <button class="btn-secondary-action" data-action="back-to-cart" data-i18n="backToCart">
+          رجوع للسلة
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer no-print">
+    <div class="footer-inner">
+      <img src="/assets/brand/rasan-wordmark-original.png" alt="رسن" style="height:32px; object-fit:contain" />
+      <p class="footer-copy">رسن | كافيه ومطعم — شارع الكورنيش، ضفاف نهر الفرات</p>
+    </div>
+  </footer>
+
+  <!-- Application Script -->
+  <script type="module" src="/src/js/menu.js"></script>
+</body>
+</html>

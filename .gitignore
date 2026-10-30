@@ -1,0 +1,16 @@
+/node_modules/
+/dist/
+/assets/
+/public/assets/vendor/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+test_*.mjs
+create_admin.mjs
+*.log
+/RASAN_ANTIGRAVITY_MASTER_BLUEPRINT_V2.md
+/START_HERE.md
+/docs/
+/supabase/

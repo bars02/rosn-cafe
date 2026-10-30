@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="لوحة إدارة رسن — إدارة القائمة وإعدادات المطعم" />
+  <title>لوحة إدارة رسن | RASAN Dashboard</title>
+  <link rel="icon" type="image/png" href="/assets/brand/rasan-horse-original.png" />
+  <link rel="stylesheet" href="/src/css/admin.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "/assets/vendor/@supabase_supabase-js.js",
+      "qrcode": "/assets/vendor/qrcode.js"
+    }
+  }
+  </script>
+</head>
+<body class="admin-layout">
+  <!-- Mobile Sidebar Backdrop -->
+  <div id="admin-sidebar-backdrop" class="modal-overlay" style="z-index:1050"></div>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar" aria-label="شريط التنقل الرئيسي">
+    <div class="sidebar-header">
+      <img src="/assets/brand/rasan-wordmark-original.png" alt="رسن" class="sidebar-logo" />
+      <div class="sidebar-title-group">
+        <h2 data-i18n="adminTitle">لوحة إدارة رسن</h2>
+        <p data-i18n="adminSubtitle">نظام إدارة القائمة والمحتوى</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item-btn is-active" data-tab="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span data-i18n="adminOverview">نظرة عامة</span>
+      </button>
+
+      <button class="nav-item-btn" data-tab="categories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <span data-i18n="adminCategories">الأقسام</span>
+      </button>
+
+      <button class="nav-item-btn" data-tab="products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span data-i18n="adminProducts">المنتجات</span>
+      <button class="nav-item-btn" data-tab="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span data-i18n="adminSettings">إعدادات الموقع</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" class="nav-item-btn" style="color:var(--paper)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span data-i18n="adminPreview">معاينة القائمة العامة</span>
+      </a>
+
+      <button id="admin-logout-btn" class="nav-item-btn" style="color:var(--danger)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span data-i18n="adminLogout">تسجيل الخروج</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="admin-main">
+    <!-- Topbar -->
+    <header class="admin-topbar">
+      <div style="display:flex; align-items:center; gap:var(--space-3)">
+        <button id="mobile-toggle-btn" class="mobile-sidebar-toggle" aria-label="القائمة الجانبية">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <h1 id="topbar-title" class="topbar-title" data-i18n="adminOverview">نظرة عامة</h1>
+      </div>
+
+      <div class="topbar-actions">
+        <!-- Language Switcher in Admin -->
+        <button id="admin-lang-btn" class="lang-btn" aria-label="Switch Language">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20"></path>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="admin-lang-text">English</span>
+        </button>
+
+        <a href="/" target="_blank" class="btn-primary-action" style="padding:6px 14px; min-height:36px; font-size:0.875rem; width:auto">
+          <span data-i18n="adminPreview">معاينة القائمة</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Admin Body -->
+    <main class="admin-body">
+      <!-- Supabase Live Connection Status Banner -->
+      <div class="admin-live-badge" style="background:var(--paper); border:1px solid rgba(40,167,69,0.25); border-radius:var(--radius-card); padding:var(--space-3) var(--space-4); margin-bottom:var(--space-6); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--space-2)">
+        <div style="display:flex; align-items:center; gap:var(--space-3)">
+          <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--success); box-shadow:0 0 0 3px rgba(40,167,69,0.2);"></span>
+          <span style="font-size:0.875rem; color:var(--walnut-dark); font-weight:600">
+            النظام متصل بقاعدة بيانات سوبابيز الحية (Supabase Live Connected) — كافة التعديلات تنعكس فوراً في المنيو العام.
+          </span>
+        </div>
+        <span class="badge badge-available">آمن ومشفر بنظام RLS</span>
+      </div>
+
+      <!-- Tab: Overview -->
+      <section id="tab-overview" class="admin-tab-panel is-active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-categories-count">5</span>
+              <span class="stat-label" data-i18n="statCategories">الأقسام النشطة</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-products-count">13</span>
+              <span class="stat-label" data-i18n="statProducts">المنتجات المنشورة</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="color:var(--danger)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-unavailable-count">1</span>
+              <span class="stat-label" data-i18n="statUnavailable">أصناف غير متوفرة</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="color:var(--success)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" style="font-size:1.25rem" data-i18n="active">نشط</span>
+              <span class="stat-label" data-i18n="statDelivery">حالة التوصيل</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div style="display:flex; gap:var(--space-3); margin-bottom:var(--space-6)">
+          <button id="btn-add-product-overview" class="btn-primary-action" style="width:auto">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span data-i18n="addProduct">إضافة منتج جديد</span>
+          </button>
+          <button id="btn-goto-settings-overview" class="btn-secondary-action" style="width:auto" data-action="go-to-settings">
+            <span data-i18n="adminSettings">إعدادات الموقع</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Tab: Categories -->
+      <section id="tab-categories" class="admin-tab-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4)">
+          <h2 style="font-size:1.125rem" data-i18n="adminCategories">الأقسام</h2>
+          <button id="btn-add-category-main" class="btn-primary-action" style="width:auto; min-height:38px; padding:6px 14px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span data-i18n="addCategory">إضافة قسم جديد</span>
+          </button>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th data-i18n="categoryName">اسم القسم</th>
+                <th>الاسم بالإنجليزية</th>
+                <th data-i18n="status">الحالة</th>
+                <th data-i18n="actions">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="admin-categories-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Tab: Products -->
+      <section id="tab-products" class="admin-tab-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4)">
+          <h2 style="font-size:1.125rem" data-i18n="adminProducts">المنتجات</h2>
+          <button id="btn-add-product-products" class="btn-primary-action" style="width:auto; min-height:38px; padding:6px 14px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span data-i18n="addProduct">إضافة منتج جديد</span>
+          </button>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-data-table">
+            <thead>
+              <tr>
+                <th>الصورة</th>
+                <th data-i18n="productName">اسم المنتج</th>
+                <th data-i18n="category">القسم</th>
+                <th data-i18n="price">السعر (د.ع)</th>
+                <th data-i18n="status">الحالة</th>
+                <th>التوفر</th>
+                <th data-i18n="actions">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Tab: Site Settings (Full controls matching Blueprint Section 02) -->
+      <section id="tab-settings" class="admin-tab-panel">
+        <form id="site-settings-form" class="settings-form-container">
+          <!-- Identity Section -->
+          <h2 class="form-section-title">1. هوية المطعم والنصوص الرئيسية</h2>
+
+          <div class="form-two-col">
+            <div class="form-group">
+              <label for="setting-name-ar" class="form-label" data-i18n="restaurantNameAr">اسم المطعم (عربي)</label>
+              <input type="text" id="setting-name-ar" class="form-input" value="رسن" required />
+            </div>
+            <div class="form-group">
+              <label for="setting-name-en" class="form-label" data-i18n="restaurantNameEn">اسم المطعم (English)</label>
+              <input type="text" id="setting-name-en" class="form-input" value="RASAN" required />
+            </div>
+          </div>
+
+          <div class="form-two-col" style="margin-top:var(--space-3)">
+            <div class="form-group">
+              <label for="setting-desc-ar" class="form-label" data-i18n="descriptorAr">الوصف الثانوي (عربي)</label>
+              <input type="text" id="setting-desc-ar" class="form-input" value="كافيه ومطعم" required />
+            </div>
+            <div class="form-group">
+              <label for="setting-desc-en" class="form-label" data-i18n="descriptorEn">الوصف الثانوي (English)</label>
+              <input type="text" id="setting-desc-en" class="form-input" value="Café & Restaurant" required />
+            </div>
+          </div>
+
+          <div class="form-two-col" style="margin-top:var(--space-3)">
+            <div class="form-group">
+              <label for="setting-tagline-ar" class="form-label" data-i18n="taglineAr">شعار الهيرو (عربي)</label>
+              <input type="text" id="setting-tagline-ar" class="form-input" value="على ضفاف الفرات" />
+            </div>
+            <div class="form-group">
+              <label for="setting-tagline-en" class="form-label" data-i18n="taglineEn">شعار الهيرو (English)</label>
+              <input type="text" id="setting-tagline-en" class="form-input" value="By the Euphrates" />
+            </div>
+          </div>
+
+          <!-- Hero Image -->
+          <div class="form-group" style="margin-top:var(--space-4)">
+            <label class="form-label" data-i18n="heroImage">صورة الهيرو / واجهة المطعم</label>
+            <div class="hero-image-preview-box" style="position:relative; max-width:400px; max-height:220px; overflow:hidden; border-radius:var(--radius-card); border:1px solid var(--line);">
+              <img id="setting-hero-preview" src="/assets/brand/rasan-exterior-reference.jpg" alt="واجهة رسن على ضفاف الفرات" style="width:100%; height:100%; object-fit:cover;" />
+            </div>
+            <input type="file" id="setting-hero-file-input" accept="image/jpeg,image/png,image/webp" style="display:none" />
+            <input type="hidden" id="setting-hero-image-path" value="/assets/brand/rasan-exterior-reference.jpg" />
+            <div style="display:flex; align-items:center; gap:var(--space-3); margin-top:8px;">
+              <button type="button" id="btn-upload-hero-image" class="btn-primary-action" style="width:auto; padding:8px 18px; font-size:0.875rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span>اختيار ورفع صورة جديدة للواجهة 📤</span>
+              </button>
+              <span id="hero-upload-status" style="font-size:0.8125rem; color:var(--muted)"></span>
+            </div>
+            <span class="form-hint" data-i18n="heroImageHint">يتم رفع الصورة لمستودع التخزين السحابي لتنعكس فوراً على واجهة الزوار</span>
+          </div>
+
+          <!-- Contact & Social Section -->
+          <h2 class="form-section-title">2. معلومات الاتصال والروابط المباشرة</h2>
+
+          <div class="form-two-col">
+            <div class="form-group">
+              <label for="setting-call-phone" class="form-label" data-i18n="callNumber">رقم الاتصال المباشر</label>
+              <input type="tel" id="setting-call-phone" class="form-input" value="+964 770 123 4567" />
+              <span class="form-hint" data-i18n="callNumberHint">يظهر كزر اتصال مباشر للزوار عند توفره</span>
+            </div>
+            <div class="form-group">
+              <label for="setting-whatsapp-num" class="form-label" data-i18n="whatsappNumber">رقم واتساب للطلبات</label>
+              <input type="text" id="setting-whatsapp-num" class="form-input" value="9647701234567" pattern="[0-9]+" required />
+              <span class="form-hint" data-i18n="whatsappNumberHint">أرقام دولية فقط بدون علامة + (مثال: 9647XXXXXXXXX)</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:var(--space-3)">
+            <label for="setting-map-url" class="form-label" data-i18n="mapUrl">رابط موقع خرائط Google</label>
+            <input type="url" id="setting-map-url" class="form-input" value="https://maps.google.com/?q=Euphrates+River+View" />
+            <span class="form-hint" data-i18n="mapUrlHint">رابط يبدأ بـ https://maps.google.com أو https://goo.gl/maps</span>
+          </div>
+
+          <div class="form-two-col" style="margin-top:var(--space-3)">
+            <div class="form-group">
+              <label for="setting-loc-label-ar" class="form-label" data-i18n="locationLabelAr">تسمية الموقع (عربي)</label>
+              <input type="text" id="setting-loc-label-ar" class="form-input" value="شارع الكورنيش، ضفاف نهر الفرات" />
+            </div>
+            <div class="form-group">
+              <label for="setting-loc-label-en" class="form-label" data-i18n="locationLabelEn">تسمية الموقع (English)</label>
+              <input type="text" id="setting-loc-label-en" class="form-input" value="Corniche St, Euphrates Riverfront" />
+            </div>
+          </div>
+
+          <!-- Instagram Controls -->
+          <div style="background:#fff; border:1px solid var(--line); border-radius:var(--radius-card); padding:var(--space-4); margin-top:var(--space-3);">
+            <div class="toggle-row" style="margin-bottom:var(--space-3); padding-bottom:var(--space-2); border-bottom:1px solid var(--line-light);">
+              <div class="toggle-label-group">
+                <strong>تفعيل زر إنستغرام في الواجهة</strong>
+                <span class="form-hint">عند التعطيل سيتم إخفاء زر إنستغرام تماماً عن الزبائن</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-instagram-enabled" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="form-two-col">
+              <div class="form-group">
+                <label for="setting-instagram-url" class="form-label" data-i18n="instagramUrl">رابط حساب إنستغرام</label>
+                <input type="url" id="setting-instagram-url" class="form-input" value="https://instagram.com/rasan.cafe" placeholder="https://instagram.com/..." />
+              </div>
+              <div class="form-group">
+                <label for="setting-instagram-handle" class="form-label">معرّف الحساب الظاهر</label>
+                <input type="text" id="setting-instagram-handle" class="form-input" value="@rasan.cafe" placeholder="@rasan.cafe" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Facebook Controls -->
+          <div style="background:#fff; border:1px solid var(--line); border-radius:var(--radius-card); padding:var(--space-4); margin-top:var(--space-3);">
+            <div class="toggle-row" style="margin-bottom:var(--space-3); padding-bottom:var(--space-2); border-bottom:1px solid var(--line-light);">
+              <div class="toggle-label-group">
+                <strong>تفعيل زر فيسبوك في الواجهة</strong>
+                <span class="form-hint">عند التعطيل سيتم إخفاء زر فيسبوك تماماً عن الزبائن</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-facebook-enabled" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="form-two-col">
+              <div class="form-group">
+                <label for="setting-facebook-url" class="form-label" data-i18n="facebookUrl">رابط صفحة فيسبوك</label>
+                <input type="url" id="setting-facebook-url" class="form-input" value="https://facebook.com/rasan.cafe" placeholder="https://facebook.com/..." />
+              </div>
+              <div class="form-group">
+                <label for="setting-facebook-handle" class="form-label">معرّف أو اسم الصفحة الظاهر</label>
+                <input type="text" id="setting-facebook-handle" class="form-input" value="رسن كافيه ومطعم" placeholder="اسم الصفحة" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Announcements Section -->
+          <h2 class="form-section-title">3. الإعلانات والشريط العلوي</h2>
+
+          <div class="form-two-col">
+            <div class="form-group">
+              <label for="setting-announce-ar" class="form-label" data-i18n="announcementAr">نص الإعلان (عربي)</label>
+              <textarea id="setting-announce-ar" class="form-textarea">أهلاً بكم في رسن. جلسات عائلية هادئة مطلة على الفرات وقائمة قهوة مختصة.</textarea>
+            </div>
+            <div class="form-group">
+              <label for="setting-announce-en" class="form-label" data-i18n="announcementEn">نص الإعلان (English)</label>
+              <textarea id="setting-announce-en" class="form-textarea">Welcome to RASAN. Relaxing riverside seating and specialty coffee menu.</textarea>
+            </div>
+          </div>
+
+          <!-- Operational Controls Section -->
+          <h2 class="form-section-title">4. مفاتيح التشغيل وخيارات الخدمة</h2>
+
+          <div class="toggle-row">
+            <div class="toggle-label-group">
+              <strong data-i18n="isOpenToggle">المطعم يستقبل الزوار حالياً (مفتوح / مغلق)</strong>
+              <span class="form-hint">يظهر شارة حالة المطعم الحالية في الصفحة الرئيسية</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-is-open" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label-group">
+              <strong data-i18n="dineInToggle">تفعيل طلبات الصالة وعرض كشف الكابتن</strong>
+              <span class="form-hint">يتيح للزوار تجميع طلبات الصالة وتوليد كشف للعرض على الكابتن</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-dine-in-enabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label-group">
+              <strong data-i18n="deliveryToggle">تفعيل خيار الدليفري ومراسلة واتساب</strong>
+              <span class="form-hint">يتطلب وجود رقم واتساب دولي صالح</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-delivery-enabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Save Actions -->
+          <div style="display:flex; gap:var(--space-3); margin-top:var(--space-6); padding-top:var(--space-4); border-top:1px solid var(--line)">
+            <button type="submit" class="btn-primary-action" style="width:auto">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span data-i18n="save">حفظ التغييرات</span>
+            </button>
+            <button type="button" id="settings-cancel-btn" class="btn-secondary-action" style="width:auto" data-i18n="cancel">
+              إلغاء
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- Admin Login Screen Overlay -->
+  <div id="admin-login-overlay" class="modal-overlay is-open" style="z-index:2000; background:var(--stone);">
+    <div class="modal-dialog" style="max-width:420px; padding:var(--space-6); background:var(--paper);">
+      <div style="text-align:center; margin-bottom:var(--space-6);">
+        <img src="/assets/brand/rasan-wordmark-original.png" alt="رسن" style="height:48px; margin:0 auto var(--space-3); object-fit:contain;" />
+        <h2 style="font-size:1.25rem; color:var(--walnut);">تسجيل الدخول إلى لوحة الإدارة</h2>
+        <p style="font-size:0.875rem; color:var(--muted); margin-top:4px;">إدارة المنيو وإعدادات رسن كافيه ومطعم</p>
+      </div>
+
+      <form id="admin-login-form" style="display:flex; flex-direction:column; gap:var(--space-4);">
+        <div class="form-group">
+          <label for="login-email" class="form-label">البريد الإلكتروني</label>
+          <input type="email" id="login-email" class="form-input" placeholder="admin@rasan.menu" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password" class="form-label">كلمة المرور</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required />
+        </div>
+
+        <div id="login-error-msg" style="display:none; color:var(--danger); font-size:0.875rem; background:var(--danger-bg); padding:8px 12px; border-radius:var(--radius-sm);"></div>
+
+        <button type="submit" id="login-submit-btn" class="btn-primary-action" style="margin-top:var(--space-2);">
+          <span>تسجيل الدخول</span>
+        </button>
+
+        <div style="text-align:center; margin-top:var(--space-2);">
+          <a href="/" style="font-size:0.8125rem; color:var(--muted); text-decoration:underline;">العودة للقائمة العامة</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category Modal -->
+  <div id="category-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-dialog" style="max-width:500px;">
+      <div class="modal-header">
+        <h2 id="category-modal-title" class="modal-title">إضافة قسم جديد</h2>
+        <button class="modal-close-btn" data-action="close" aria-label="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="category-modal-form" class="modal-body" style="display:flex; flex-direction:column; gap:var(--space-3);">
+        <input type="hidden" id="category-edit-id" value="" />
+        <div class="form-group">
+          <label for="category-input-name-ar" class="form-label">اسم القسم (عربي) *</label>
+          <input type="text" id="category-input-name-ar" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label for="category-input-name-en" class="form-label" style="margin-bottom:0;">اسم القسم (English) <span style="font-size:0.75rem; color:var(--muted)">(إلزامي للتفعيل)</span></label>
+            <button type="button" id="btn-auto-translate-category" class="btn-secondary-action" style="padding:2px 10px; font-size:0.75rem; width:auto; border-color:var(--copper); color:var(--copper-dark); font-weight:600;">
+              <span>ترجمة ذكية من العربي 🪄</span>
+            </button>
+          </div>
+          <input type="text" id="category-input-name-en" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="category-input-slug" class="form-label">الاسم اللطيف (Slug) *</label>
+          <input type="text" id="category-input-slug" class="form-input" placeholder="e.g. cold-drinks" required />
+        </div>
+        <div class="form-group">
+          <label for="category-input-floor" class="form-label">مكان / طابق القسم *</label>
+          <select id="category-input-floor" class="form-input">
+            <option value="floor_1">☕ الكافيه (الطابق الأرضي)</option>
+            <option value="floor_2">🍽️ المطعم (الطابق الثاني)</option>
+            <option value="all">🌟 كلاهما / متاح بالقسمين</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="category-input-order" class="form-label">ترتيب العرض</label>
+          <input type="number" id="category-input-order" class="form-input" value="1" min="0" />
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label-group">
+            <strong>تفعيل القسم (ظاهر للزوار)</strong>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="category-input-active" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="modal-footer" style="padding-inline:0; padding-bottom:0; flex-direction:row;">
+          <button type="submit" class="btn-primary-action" style="flex:1;">حفظ القسم</button>
+          <button type="button" class="btn-secondary-action" data-action="close" style="width:auto;">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-dialog" style="max-width:600px;">
+      <div class="modal-header">
+        <h2 id="product-modal-title" class="modal-title">إضافة منتج جديد</h2>
+        <button class="modal-close-btn" data-action="close" aria-label="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="product-modal-form" class="modal-body" style="display:flex; flex-direction:column; gap:var(--space-3);">
+        <input type="hidden" id="product-edit-id" value="" />
+        <div class="form-two-col">
+          <div class="form-group">
+            <label for="product-input-name-ar" class="form-label">اسم المنتج (عربي) *</label>
+            <input type="text" id="product-input-name-ar" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label for="product-input-name-en" class="form-label" style="margin-bottom:0;">اسم المنتج (English) *</label>
+              <button type="button" id="btn-auto-translate-product" class="btn-secondary-action" style="padding:2px 10px; font-size:0.75rem; width:auto; border-color:var(--copper); color:var(--copper-dark); font-weight:600;">
+                <span>ترجمة ذكية 🪄</span>
+              </button>
+            </div>
+            <input type="text" id="product-input-name-en" class="form-input" required />
+          </div>
+        </div>
+        <div class="form-two-col">
+          <div class="form-group">
+            <label for="product-input-category" class="form-label">القسم *</label>
+            <select id="product-input-category" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label for="product-input-price" class="form-label">السعر (د.ع) *</label>
+            <input type="number" id="product-input-price" class="form-input" min="500" step="250" required />
+          </div>
+        </div>
+        <div class="form-two-col">
+          <div class="form-group">
+            <label for="product-input-floor" class="form-label">ظهور المنتج في الطوابق</label>
+            <select id="product-input-floor" class="form-input">
+              <option value="auto">تلقائي (حسب طابق القسم)</option>
+              <option value="floor_1">☕ الكافيه (الطابق الأرضي)</option>
+              <option value="floor_2">🍽️ المطعم (الطابق الثاني)</option>
+              <option value="all">🌟 مشترك (يظهر في كلا الطابقين)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-input-options" class="form-label">خيارات الصنف والتفضيلات</label>
+            <input type="text" id="product-input-options" class="form-input" placeholder="مثال: سبايسي, عادي, آيس, بالفريز" />
+            <span class="form-hint" style="font-size:0.75rem;">افصل بفاصلة أو اترك فارغاً للخيارات الذكية</span>
+          </div>
+        </div>
+        <div class="form-two-col">
+          <div class="form-group">
+            <label for="product-input-desc-ar" class="form-label">الوصف (عربي)</label>
+            <textarea id="product-input-desc-ar" class="form-textarea" placeholder="اكتب وصف الوجبة بالعربي..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="product-input-desc-en" class="form-label">الوصف (English)</label>
+            <textarea id="product-input-desc-en" class="form-textarea" placeholder="Product English description..."></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">صورة المنتج (JPG, PNG, WebP — كحد أقصى 5MB)</label>
+          <div style="display:flex; gap:var(--space-3); align-items:center;">
+            <input type="file" id="product-input-image-file" accept="image/jpeg,image/png,image/webp" style="display:none;" />
+            <button type="button" id="product-image-upload-btn" class="btn-secondary-action" style="width:auto;">اختر صورة جديدة</button>
+            <input type="hidden" id="product-input-image-path" value="" />
+            <span id="product-image-name-badge" style="font-size:0.8125rem; color:var(--muted);"></span>
+          </div>
+        </div>
+        <div class="form-two-col">
+          <div class="form-group">
+            <label for="product-input-status" class="form-label">حالة النشر</label>
+            <select id="product-input-status" class="form-input">
+              <option value="published">منشور (Published)</option>
+              <option value="draft">مسودة (Draft)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-input-order" class="form-label">ترتيب العرض</label>
+            <input type="number" id="product-input-order" class="form-input" value="1" min="0" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label-group">
+            <strong>توفر الصنف (متوفر للطلب)</strong>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="product-input-available" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label-group">
+            <strong>صنف مميز (Featured)</strong>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="product-input-featured" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="modal-footer" style="padding-inline:0; padding-bottom:0; flex-direction:row;">
+          <button type="submit" id="product-save-btn" class="btn-primary-action" style="flex:1;">حفظ المنتج</button>
+          <button type="button" class="btn-secondary-action" data-action="close" style="width:auto;">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/admin.js"></script>
+</body>
+</html>
