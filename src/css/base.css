@@ -201,6 +201,154 @@ body.modal-open {
   overflow: hidden;
 }
 
+/* Shared Modal Dialog & Form Controls (Used across Menu & Admin Dashboard) */
+.modal-dialog {
+  background: var(--paper);
+  border-radius: var(--radius-dialog);
+  width: 100%;
+  max-width: 540px;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--line);
+  transform: translateY(24px) scale(0.97);
+  opacity: 0;
+  transition: transform var(--motion-dialog) var(--ease-out), opacity var(--motion-normal) var(--ease-out);
+}
+
+.modal-overlay.is-open .modal-dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.modal-header {
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--walnut);
+}
+
+.modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: background var(--motion-fast) var(--ease-out);
+}
+
+.modal-close-btn:hover {
+  background: var(--stone);
+  color: var(--charcoal);
+}
+
+.modal-body {
+  padding: var(--space-4);
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.modal-footer {
+  padding: var(--space-4);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--paper);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: start;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--walnut-dark);
+  display: block;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-field);
+  font-size: 0.9375rem;
+  color: var(--charcoal);
+  transition: border-color var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--warm-caramel);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--warm-caramel-glow);
+}
+
+.form-textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.btn-primary-action {
+  width: 100%;
+  padding: 12px var(--space-4);
+  background: var(--warm-caramel);
+  color: #fff;
+  border-radius: var(--radius-field);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  box-shadow: 0 4px 14px var(--warm-caramel-glow);
+  transition: all var(--motion-fast) var(--ease-out);
+}
+
+.btn-primary-action:hover:not(:disabled) {
+  background: var(--warm-caramel-hover);
+  transform: scale(1.01);
+  box-shadow: 0 6px 18px var(--warm-caramel-glow);
+}
+
+.btn-secondary-action {
+  width: 100%;
+  padding: 10px var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--walnut);
+  border-radius: var(--radius-field);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: background var(--motion-fast) var(--ease-out);
+}
+
+.btn-secondary-action:hover {
+  background: var(--stone);
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   html {

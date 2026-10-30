@@ -55,7 +55,7 @@ async function checkSessionState() {
   try {
     const session = await getAdminSession();
     if (session && session.user) {
-      const allowedAdminEmail = (import.meta.env?.VITE_ADMIN_EMAIL || '').trim().toLowerCase();
+      const allowedAdminEmail = (import.meta.env?.VITE_ADMIN_EMAIL || 'js.rson.cafe@gmail.com').trim().toLowerCase();
       if (allowedAdminEmail && session.user.email?.toLowerCase() !== allowedAdminEmail) {
         await signOutAdmin();
         const errorMsg = document.getElementById('login-error-msg');
@@ -101,7 +101,7 @@ function setupAuth() {
   const logoutBtn = document.getElementById('admin-logout-btn');
   const emailInput = document.getElementById('login-email');
 
-  const allowedAdminEmail = (import.meta.env.VITE_ADMIN_EMAIL || '').trim().toLowerCase();
+  const allowedAdminEmail = (import.meta.env.VITE_ADMIN_EMAIL || 'js.rson.cafe@gmail.com').trim().toLowerCase();
   if (emailInput) {
     emailInput.placeholder = 'أدخل البريد الإلكتروني';
   }
@@ -156,7 +156,14 @@ function setupAuth() {
         lockoutUntil = Date.now() + 60000; // 1 minute lockout
       }
       if (errorMsg) {
-        errorMsg.textContent = err.message || 'بيانات الدخول غير صحيحة.';
+        const rawMsg = err?.message || '';
+        if (/invalid login credentials/i.test(rawMsg)) {
+          errorMsg.textContent = 'البريد الإلكتروني أو كلمة المرور غير مطابقة في قاعدة البيانات (تأكد من تفعيل الإيميل وكلمة المرور في Supabase).';
+        } else if (/email not confirmed/i.test(rawMsg)) {
+          errorMsg.textContent = 'البريد الإلكتروني غير مؤكد بعد في Supabase.';
+        } else {
+          errorMsg.textContent = rawMsg || 'بيانات الدخول غير صحيحة.';
+        }
         errorMsg.style.display = 'block';
       }
     } finally {
