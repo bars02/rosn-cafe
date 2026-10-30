@@ -3,6 +3,7 @@ export default {
   brandName: 'رسن',
   brandDescriptor: 'كافيه ومطعم',
   riverTagline: 'على ضفاف الفرات',
+  browseMenu: 'تصفح المنيو',
   announcement: 'أهلاً بكم في رسن. جلسات هادئة مطلة على الفرات، وقهوة مختصة محضرة بعناية.',
   call: 'اتصال',
   location: 'الموقع',

@@ -7,6 +7,71 @@
   <title>لوحة إدارة رسن | RASAN Dashboard</title>
   <link rel="icon" type="image/png" href="/assets/brand/rasan-horse-original.png" />
   <link rel="stylesheet" href="/src/css/admin.css" />
+  <script>
+  (function () {
+    const BLOCKED_PATTERNS = /powered by netlify|pre-launch tools|make public|netlify-drawer|netlify-cdp|app\.netlify\.com/i;
+    const hideNode = (el) => {
+      if (!el || !el.style) return;
+      el.style.setProperty('display', 'none', 'important');
+      el.style.setProperty('visibility', 'hidden', 'important');
+      el.style.setProperty('opacity', '0', 'important');
+      el.style.setProperty('pointer-events', 'none', 'important');
+      try { el.remove(); } catch (e) {}
+    };
+    const inspectNode = (el) => {
+      if (!el || el.nodeType !== 1) return;
+      const tag = (el.tagName || '').toLowerCase();
+      const id = el.id || '';
+      const cls = typeof el.className === 'string' ? el.className : '';
+      const src = el.getAttribute?.('src') || el.getAttribute?.('href') || '';
+      if (
+        tag.includes('netlify') ||
+        /netlify/i.test(id) ||
+        /netlify/i.test(cls) ||
+        /netlify/i.test(src)
+      ) {
+        hideNode(el);
+        return;
+      }
+      if (el.parentElement === document.body || el.parentElement === document.documentElement) {
+        const text = (el.textContent || '') + ' ' + (el.shadowRoot ? el.shadowRoot.innerHTML : '');
+        if (BLOCKED_PATTERNS.test(text)) {
+          hideNode(el);
+        }
+      }
+    };
+    if (Element.prototype.attachShadow) {
+      const origAttachShadow = Element.prototype.attachShadow;
+      Element.prototype.attachShadow = function (init) {
+        const shadow = origAttachShadow.call(this, init);
+        const host = this;
+        const obs = new MutationObserver(() => {
+          if (BLOCKED_PATTERNS.test(shadow.innerHTML || '') || BLOCKED_PATTERNS.test(shadow.textContent || '')) {
+            hideNode(host);
+          }
+        });
+        obs.observe(shadow, { childList: true, subtree: true, characterData: true });
+        setTimeout(() => {
+          if (BLOCKED_PATTERNS.test(shadow.innerHTML || '') || BLOCKED_PATTERNS.test(shadow.textContent || '')) {
+            hideNode(host);
+          }
+        }, 0);
+        return shadow;
+      };
+    }
+    const domObserver = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        for (const node of m.addedNodes) {
+          inspectNode(node);
+        }
+      }
+    });
+    domObserver.observe(document.documentElement, { childList: true, subtree: true });
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('body > *').forEach(inspectNode);
+    });
+  })();
+  </script>
   <script type="importmap">
   {
     "imports": {

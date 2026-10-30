@@ -6,7 +6,7 @@ export const mockSiteSettings = {
   descriptor_en: 'Café & Restaurant',
   tagline_ar: 'على ضفاف الفرات',
   tagline_en: 'By the Euphrates',
-  hero_image_path: '/assets/brand/rasan-exterior-reference.jpg',
+  hero_image_path: null,
   announcement_ar: 'أهلاً بكم في رسن. جلسات هادئة مطلة على الفرات، وقهوة مختصة محضرة بعناية.',
   announcement_en: 'Welcome to RASAN. Serene riverside ambiance and meticulously crafted specialty coffee.',
   phone_display: '+964 770 123 4567',

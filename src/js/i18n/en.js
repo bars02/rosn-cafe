@@ -3,6 +3,7 @@ export default {
   brandName: 'RASAN',
   brandDescriptor: 'Café & Restaurant',
   riverTagline: 'By the Euphrates',
+  browseMenu: 'Browse Menu',
   announcement: 'Welcome to RASAN. Serene riverside ambiance and meticulously crafted specialty coffee.',
   call: 'Call',
   location: 'Location',

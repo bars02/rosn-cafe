@@ -227,3 +227,27 @@ body.modal-open {
     display: block !important;
   }
 }
+
+/* Force-hide any injected hosting / preview badges (e.g. Powered by Netlify / CDP drawer) */
+[id*="netlify" i],
+[class*="netlify" i],
+[data-netlify-deploy-notifications],
+iframe[src*="netlify" i],
+iframe[title*="netlify" i],
+a[href*="netlify.com" i],
+netlify-drawer,
+netlify-badge,
+netlify-widget,
+div[style*="z-index: 2147483647"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
