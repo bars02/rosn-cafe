@@ -102,8 +102,8 @@ function setupAuth() {
   const emailInput = document.getElementById('login-email');
 
   const allowedAdminEmail = (import.meta.env.VITE_ADMIN_EMAIL || '').trim().toLowerCase();
-  if (allowedAdminEmail && emailInput) {
-    emailInput.placeholder = allowedAdminEmail;
+  if (emailInput) {
+    emailInput.placeholder = 'أدخل البريد الإلكتروني';
   }
 
   loginForm?.addEventListener('submit', async (e) => {
