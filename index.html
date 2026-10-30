@@ -299,12 +299,27 @@
           />
         </button>
 
-        <!-- LEFT SIDE (على يسار الشعار): فقط زر الهوم للرجوع (بدون زر اللغة) -->
+        <!-- LEFT SIDE (على يسار الشعار): زر تبديل طريقة العرض (شبكة مصغرة متعددة / بطاقة كبيرة) -->
         <div class="header-left-actions">
-          <button type="button" id="btn-back-welcome" class="btn-back-cover" aria-label="العودة للرئيسية" title="الواجهة الرئيسية">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          <button
+            type="button"
+            id="btn-grid-view-toggle"
+            class="btn-view-toggle"
+            data-view="compact"
+            aria-label="تغيير طريقة عرض الأصناف"
+            title="تبديل طريقة العرض (شبكة متعددة / عرض كبير)"
+          >
+            <!-- Compact Multi-Grid Icon (Active by default) -->
+            <svg class="view-icon-compact" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+            </svg>
+            <!-- Single / Large Card Icon (Shown when switched to single view) -->
+            <svg class="view-icon-single" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:none">
+              <rect x="4" y="4" width="16" height="16" rx="2.5"></rect>
+              <line x1="4" y1="15" x2="20" y2="15"></line>
             </svg>
           </button>
         </div>
@@ -324,7 +339,7 @@
     <!-- Main Menu Grid -->
     <main id="main-menu-content" class="menu-content" role="main">
       <div id="search-count-label" class="search-count-label" style="display:none"></div>
-      <div id="products-grid" class="products-grid" aria-live="polite">
+      <div id="products-grid" class="products-grid is-compact-grid" aria-live="polite">
         <!-- Product cards rendered dynamically -->
       </div>
       <div id="empty-search-state" class="empty-results" style="display:none">

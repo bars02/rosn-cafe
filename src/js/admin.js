@@ -398,7 +398,7 @@ function getCategoryFloor(category) {
     const map = JSON.parse(localStorage.getItem('rasan_category_floors') || '{}');
     if (category.id && map[category.id]) return map[category.id];
     if (category.slug && map[category.slug]) return map[category.slug];
-  } catch (e) {}
+  } catch (e) { }
   if (category.slug?.startsWith('f2-')) return 'floor_2';
   if (category.slug?.startsWith('all-')) return 'all';
   return 'floor_1';
@@ -409,14 +409,14 @@ function setCategoryFloor(idOrSlug, floor) {
     const map = JSON.parse(localStorage.getItem('rasan_category_floors') || '{}');
     map[idOrSlug] = floor;
     localStorage.setItem('rasan_category_floors', JSON.stringify(map));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function getProductMeta(product) {
   try {
     const map = JSON.parse(localStorage.getItem('rasan_product_meta') || '{}');
     if (product.id && map[product.id]) return map[product.id];
-  } catch (e) {}
+  } catch (e) { }
   return { floor: 'auto', options: '' };
 }
 
@@ -425,7 +425,7 @@ function setProductMeta(productId, meta) {
     const map = JSON.parse(localStorage.getItem('rasan_product_meta') || '{}');
     map[productId] = meta;
     localStorage.setItem('rasan_product_meta', JSON.stringify(map));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function setupCategoryModal() {
@@ -532,6 +532,24 @@ function setupProductModal() {
   const fileInput = document.getElementById('product-input-image-file');
   const uploadBtn = document.getElementById('product-image-upload-btn');
   const badgeName = document.getElementById('product-image-name-badge');
+  const imgPreview = document.getElementById('product-image-preview');
+
+  const translateOptionsGuide = async (rawOptions) => {
+    if (!rawOptions) return '';
+    const parts = rawOptions.split(/[،,]/).map((s) => s.trim()).filter(Boolean);
+    const translatedParts = await Promise.all(
+      parts.map(async (part) => {
+        if (part.includes('/')) return part;
+        try {
+          const enPart = await translateArabicToEnglish(part);
+          return enPart && enPart.toLowerCase() !== part.toLowerCase() ? `${part} / ${enPart}` : part;
+        } catch (err) {
+          return part;
+        }
+      })
+    );
+    return translatedParts.join(', ');
+  };
 
   const openProductModalForAdd = () => {
     document.getElementById('product-modal-title').textContent = t('addProduct');
@@ -542,7 +560,8 @@ function setupProductModal() {
     document.getElementById('product-input-desc-ar').value = '';
     document.getElementById('product-input-desc-en').value = '';
     document.getElementById('product-input-image-path').value = '';
-    if (badgeName) badgeName.textContent = '';
+    if (imgPreview) imgPreview.src = '/assets/brand/rasan-horse-original.png';
+    if (badgeName) badgeName.textContent = 'لم يتم اختيار صورة بعد';
     document.getElementById('product-input-status').value = 'published';
     document.getElementById('product-input-order').value = adminProducts.length + 1;
     document.getElementById('product-input-available').checked = true;
@@ -561,27 +580,34 @@ function setupProductModal() {
   translateProductBtn?.addEventListener('click', async () => {
     const arName = document.getElementById('product-input-name-ar').value.trim();
     const arDesc = document.getElementById('product-input-desc-ar').value.trim();
-    if (!arName) {
-      showToast('يرجى كتابة اسم المنتج بالعربي أولاً لترجمته', 'error');
+    const arOptions = document.getElementById('product-input-options').value.trim();
+    if (!arName && !arDesc && !arOptions) {
+      showToast('يرجى كتابة اسم الصنف أو الوصف بالعربي أولاً لترجمته', 'error');
       return;
     }
     translateProductBtn.disabled = true;
-    translateProductBtn.innerHTML = '<span>جارٍ الترجمة... ⏳</span>';
+    translateProductBtn.innerHTML = '<span>جارٍ ترجمة الكل... ⏳</span>';
 
     try {
-      const enName = await translateArabicToEnglish(arName);
-      document.getElementById('product-input-name-en').value = enName;
+      if (arName) {
+        const enName = await translateArabicToEnglish(arName);
+        document.getElementById('product-input-name-en').value = enName;
+      }
       if (arDesc) {
         const enDesc = await translateArabicToEnglish(arDesc);
         document.getElementById('product-input-desc-en').value = enDesc;
       }
-      showToast('تمت الترجمة للإنجليزية بنجاح 🪄', 'success');
+      if (arOptions) {
+        const bilingualOptions = await translateOptionsGuide(arOptions);
+        document.getElementById('product-input-options').value = bilingualOptions;
+      }
+      showToast('تمت ترجمة الاسم والوصف ودليل الخيارات للإنجليزية بنجاح 🪄', 'success');
     } catch (e) {
       console.warn('Product translate error:', e);
-      showToast('تعذرت الترجمة، يرجى كتابة الاسم يدوياً', 'info');
+      showToast('تعذرت الترجمة التلقائية، يرجى المحاولة مرة أخرى', 'info');
     } finally {
       translateProductBtn.disabled = false;
-      translateProductBtn.innerHTML = '<span>ترجمة ذكية 🪄</span>';
+      translateProductBtn.innerHTML = '<span>🪄 ترجمة الكل للإنجليزي تلقائياً</span>';
     }
   });
 
@@ -591,20 +617,27 @@ function setupProductModal() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (imgPreview) {
+      try {
+        imgPreview.src = URL.createObjectURL(file);
+      } catch (err) {}
+    }
+
     uploadBtn.disabled = true;
-    uploadBtn.textContent = 'جارٍ الرفع...';
+    uploadBtn.innerHTML = '<span>جارٍ رفع الصورة... ⏳</span>';
 
     try {
       const publicUrl = await uploadMenuImage(file);
       document.getElementById('product-input-image-path').value = publicUrl;
-      if (badgeName) badgeName.textContent = `تم الرفع: ${file.name}`;
-      showToast('تم رفع الصورة بنجاح', 'success');
+      if (imgPreview) imgPreview.src = publicUrl;
+      if (badgeName) badgeName.textContent = `تم الرفع بنجاح ✅ (${file.name})`;
+      showToast('تم رفع صورة الصنف بنجاح 🖼️', 'success');
     } catch (err) {
       console.error('Image upload failed:', err);
       showToast(err.message || 'فشل رفع الصورة', 'error');
     } finally {
       uploadBtn.disabled = false;
-      uploadBtn.textContent = 'اختر صورة جديدة';
+      uploadBtn.innerHTML = '<span>اختر وارفع صورة الصنف</span>';
     }
   });
 
@@ -614,51 +647,76 @@ function setupProductModal() {
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const saveBtn = document.getElementById('product-save-btn');
     const id = document.getElementById('product-edit-id').value;
     const name_ar = document.getElementById('product-input-name-ar').value.trim();
-    const name_en = document.getElementById('product-input-name-en').value.trim();
+    let name_en = document.getElementById('product-input-name-en').value.trim();
     const category_id = document.getElementById('product-input-category').value;
     const price_iqd = parseInt(document.getElementById('product-input-price').value, 10);
     const description_ar = document.getElementById('product-input-desc-ar').value.trim();
-    const description_en = document.getElementById('product-input-desc-en').value.trim();
-    const image_path = document.getElementById('product-input-image-path').value.trim() || '/assets/brand/q-stone-ultra-grey.jpg';
+    let description_en = document.getElementById('product-input-desc-en').value.trim();
+    const image_path = document.getElementById('product-input-image-path').value.trim() || '/assets/brand/rasan-horse-original.png';
     const status = document.getElementById('product-input-status').value;
     const sort_order = parseInt(document.getElementById('product-input-order').value, 10) || 0;
     const is_available = document.getElementById('product-input-available').checked;
     const is_featured = document.getElementById('product-input-featured').checked;
     const floor = document.getElementById('product-input-floor').value;
-    const options = document.getElementById('product-input-options').value.trim();
+    let options = document.getElementById('product-input-options').value.trim();
 
-    const payload = {
-      name_ar,
-      name_en,
-      category_id,
-      price_iqd,
-      description_ar,
-      description_en,
-      image_path,
-      status,
-      sort_order,
-      is_available,
-      is_featured,
-    };
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'جارٍ الترجمة والرفع... ⏳';
+    }
 
     try {
+      // Auto-translate any missing English fields before saving
+      if (name_ar && !name_en) {
+        name_en = await translateArabicToEnglish(name_ar);
+        document.getElementById('product-input-name-en').value = name_en;
+      }
+      if (description_ar && !description_en) {
+        description_en = await translateArabicToEnglish(description_ar);
+        document.getElementById('product-input-desc-en').value = description_en;
+      }
+      if (options && !options.includes('/')) {
+        options = await translateOptionsGuide(options);
+        document.getElementById('product-input-options').value = options;
+      }
+
+      const payload = {
+        name_ar,
+        name_en: name_en || name_ar,
+        category_id,
+        price_iqd,
+        description_ar,
+        description_en,
+        image_path,
+        status,
+        sort_order,
+        is_available,
+        is_featured,
+      };
+
       let saved;
       if (id) {
         saved = await updateProduct(id, payload);
         setProductMeta(id, { floor, options });
-        showToast('تم تحديث المنتج بنجاح', 'success');
+        showToast('تم تحديث الصنف وترجمته بنجاح ✨', 'success');
       } else {
         saved = await createProduct(payload);
         if (saved?.id) setProductMeta(saved.id, { floor, options });
-        showToast('تمت إضافة المنتج بنجاح', 'success');
+        showToast('تمت إضافة الصنف ورفعه للمنيو بنجاح ✨', 'success');
       }
       closeModal(modal);
       await loadAllAdminData();
     } catch (err) {
       console.error('Error saving product:', err);
       showToast(err.message || 'فشل حفظ المنتج', 'error');
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'حفظ ورفع الصنف للمنيو ✨';
+      }
     }
   });
 }
@@ -679,7 +737,9 @@ function populateCategorySelect(selectedId = null) {
 
 function openEditProduct(product) {
   const modal = document.getElementById('product-modal');
-  document.getElementById('product-modal-title').textContent = 'تعديل المنتج';
+  const imgPreview = document.getElementById('product-image-preview');
+  const badgeName = document.getElementById('product-image-name-badge');
+  document.getElementById('product-modal-title').textContent = 'تعديل بيانات الصنف';
   document.getElementById('product-edit-id').value = product.id;
   document.getElementById('product-input-name-ar').value = product.name_ar;
   document.getElementById('product-input-name-en').value = product.name_en || '';
@@ -687,6 +747,8 @@ function openEditProduct(product) {
   document.getElementById('product-input-desc-ar').value = product.description_ar || '';
   document.getElementById('product-input-desc-en').value = product.description_en || '';
   document.getElementById('product-input-image-path').value = product.image_path || '';
+  if (imgPreview) imgPreview.src = product.image_path || '/assets/brand/rasan-horse-original.png';
+  if (badgeName) badgeName.textContent = product.image_path ? 'الصورة الحالية مرفوعة ✅' : 'لم يتم اختيار صورة بعد';
   document.getElementById('product-input-status').value = product.status;
   document.getElementById('product-input-order').value = product.sort_order;
   document.getElementById('product-input-available').checked = product.is_available;
@@ -838,7 +900,7 @@ function renderSettingsForm() {
   let savedSocial = {};
   try {
     savedSocial = JSON.parse(localStorage.getItem('rasan_social_handles') || '{}');
-  } catch (e) {}
+  } catch (e) { }
 
   setChecked('setting-instagram-enabled', adminSiteSettings.instagram_url ? (savedSocial.instagramEnabled !== false) : false);
   setValue('setting-instagram-url', adminSiteSettings.instagram_url || 'https://instagram.com/rasan.cafe');

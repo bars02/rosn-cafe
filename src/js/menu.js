@@ -510,17 +510,35 @@ function setupBrowseMenuAndPromo() {
     openMenuView();
   });
 
-  const backWelcomeBtn = document.getElementById('btn-back-welcome');
   const logoHomeBtn = document.getElementById('btn-logo-home');
-
-  backWelcomeBtn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    closeMenuView();
-  });
+  const gridViewToggleBtn = document.getElementById('btn-grid-view-toggle');
+  const productsGrid = document.getElementById('products-grid');
 
   logoHomeBtn?.addEventListener('click', (e) => {
     e.preventDefault();
     closeMenuView();
+  });
+
+  gridViewToggleBtn?.addEventListener('click', () => {
+    if (!productsGrid) return;
+    const isCurrentlyCompact = productsGrid.classList.contains('is-compact-grid');
+    const compactIcon = gridViewToggleBtn.querySelector('.view-icon-compact');
+    const singleIcon = gridViewToggleBtn.querySelector('.view-icon-single');
+
+    if (isCurrentlyCompact) {
+      productsGrid.classList.remove('is-compact-grid');
+      productsGrid.classList.add('is-single-grid');
+      gridViewToggleBtn.setAttribute('data-view', 'single');
+      if (compactIcon) compactIcon.style.display = 'none';
+      if (singleIcon) singleIcon.style.display = 'block';
+    } else {
+      productsGrid.classList.remove('is-single-grid');
+      productsGrid.classList.add('is-compact-grid');
+      gridViewToggleBtn.setAttribute('data-view', 'compact');
+      if (compactIcon) compactIcon.style.display = 'block';
+      if (singleIcon) singleIcon.style.display = 'none';
+    }
+    renderProducts();
   });
 
   window.addEventListener('popstate', () => {
